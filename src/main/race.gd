@@ -1,4 +1,4 @@
-## Core race scene — handles the running, cheats, and opponent logic
+## Core race scene — handles the running, cheats, opponents, and visuals
 extends Node2D
 
 @onready var wario: CharacterBody2D = $Wario
@@ -13,6 +13,13 @@ extends Node2D
 @onready var cheat_icons: HBoxContainer = $CheatUI/CheatIcons
 @onready var stage_name_label: Label = $HUD/StageName
 
+# Visual systems
+@onready var screen_shake: Camera2D = $Camera2D
+@onready var dam_flash: CanvasLayer = $DAMFlash
+@onready var vignette: CanvasLayer = $Vignette
+@onready var cheat_zones_node: Node2D = $CheatZones
+@onready var spectators_node: Node2D = $Spectators
+
 # Opponents
 var opponents := []
 var opponent_configs := [
@@ -21,7 +28,7 @@ var opponent_configs := [
 	{"name": "Peach", "personality": 0, "speed_mult": 0.85},
 	{"name": "Toad", "personality": 1, "speed_mult": 0.90},
 	{"name": "Yoshi", "personality": 1, "speed_mult": 0.87},
-	{"name": "DK", "personality": 2, "speed_mult": 0.95},
+	{"name": "Donkey Kong", "personality": 2, "speed_mult": 0.95},
 	{"name": "Bowser", "personality": 3, "speed_mult": 0.93},
 ]
 
@@ -33,7 +40,6 @@ var stage_progress := 0.0
 var total_race_distance := 5000.0
 
 # Cheat input
-var cheat_input_buffer := ""
 const CHEAT_KEYS := {"A": "Sandwich Snatch", "B": "Banana Barrage", "C": "Fake Police", 
 	"D": "Oil Spill", "E": "Spectator Wall", "F": "Energy Shot"}
 
@@ -76,6 +82,12 @@ func _input(event: InputEvent) -> void:
 			var cheat_name := CHEAT_KEYS[key]
 			if CheatManager.execute(cheat_name, wario.current_distance):
 				wario.start_cheat_animation()
+				
+				# Visual juice
+				dam_flash.flash_cheat(cheat_name)
+				vignette.activate()
+				screen_shake.medium_shake()
+				
 				await get_tree().create_timer(0.5).timeout
 				wario.stop_cheat()
 
@@ -109,11 +121,9 @@ func _on_cheat_executed(cheat_name: String, success: bool) -> void:
 		var result := opp.react_to_cheat(cheat_name, wario.current_distance)
 		if result == "affected":
 			opp.speed = opp.BASE_SPEED * opp.base_speed_multiplier * 0.5
-			await get_tree().create_timer(2.0).timeout
-			opp.speed = opp.BASE_SPEED * opp.base_speed_multiplier
 
 func _on_opponent_position(position: float) -> void:
-	pass  # Could trigger events based on opponent positions
+	pass
 
 func _transition_to_next_stage() -> void:
 	current_stage_idx += 1
@@ -128,6 +138,51 @@ func _transition_to_next_stage() -> void:
 	
 	# Refuel for new stage
 	CheatManager.refill_fuel(20.0)
+	
+	# Render zones and spectators
+	_render_course()
+
+func _render_course() -> void:
+	var segments := CourseGenerator.generate_course()
+	
+	# Render spectator zones
+	for seg in segments:
+		if seg["type"] == 1:  # Spectator zone
+			var count := randi_range(8, 20)
+			for i in range(count):
+				var spectator := _create_spectator_sprite()
+				spectator.position.x = seg["start"] * 2.0 + (i / float(count)) * seg["length"] * 2.0
+				spectators_node.add_child(spectator)
+
+func _create_spectator_sprite() -> Control:
+	var container := VBoxContainer.new()
+	container.custom_minimum_size = Vector2(16, 30)
+	
+	var head := ColorRect.new()
+	head.color = _random_skin_tone()
+	head.custom_minimum_size = Vector2(12, 12)
+	container.add_child(head)
+	
+	var body := ColorRect.new()
+	body.color = _random_clothing_color()
+	body.custom_minimum_size = Vector2(14, 15)
+	container.add_child(body)
+	
+	return container
+
+func _random_skin_tone() -> Color:
+	return [Color(0.95, 0.85, 0.7), Color(0.85, 0.7, 0.55), Color(0.75, 0.6, 0.45), Color(0.9, 0.8, 0.65)][randi() % 4]
+
+func _random_clothing_color() -> Color:
+	return [Color(0.3, 0.3, 0.8), Color(0.8, 0.2, 0.2), Color(0.2, 0.6, 0.2), Color(0.9, 0.9, 0.3), Color(0.5, 0.2, 0.6)][randi() % 5]
+
+func _create_opponent(config: Dictionary) -> Node2D:
+	var opp := Opponent.new()
+	opp.opponent_name = config["name"]
+	opp.personality = config["personality"]
+	opp.base_speed_multiplier = config["speed_mult"]
+	opp.position = Vector2(150 + config.get("start_offset", 0), 500)
+	return opp
 
 func start_race() -> void:
 	race_active = true

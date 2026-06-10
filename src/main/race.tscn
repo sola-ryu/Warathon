@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://src/main/race.gd" id="1_race"]
 [ext_resource type="Script" path="res://src/characters/wario.gd" id="2_wario"]
-[ext_resource type="FontFile" path="res://assets/fonts/mario_font.ttf" id="3_font"]
+[ext_resource type="Script" path="res://src/systems/dam_flash.gd" id="3_flash"]
+[ext_resource type="Script" path="res://src/systems/vignette_effect.gd" id="4_vignette"]
+[ext_resource type="Script" path="res://src/characters/opponent.gd" id="5_opp"]
 
 [node name="Race" type="Node2D"]
 script = ExtResource("1_race")
@@ -33,6 +35,37 @@ is_player = true
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(300, 360)
 
+[node name="CheatZones" type="Node2D" parent="."]
+
+[node name="Spectators" type="Node2D" parent="."]
+
+[node name="DAMFlash" type="CanvasLayer" parent="."]
+script = ExtResource("3_flash")
+
+[node name="DamageLabel" type="Label" parent="DAMFlash"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -40.0
+offset_right = 120.0
+offset_bottom = 40.0
+layout_mode = 0
+theme_override_fonts/font_size = 72
+text = "DAM!"
+horizontal_alignment = 1
+
+[node name="Vignette" type="CanvasLayer" parent="."]
+script = ExtResource("4_vignette")
+
+[node name="VignetteRect" type="ColorRect" parent="Vignette"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(1, 0.8, 0, 0.6)
+
 [node name="HUD" type="Control" parent="."]
 anchors_preset = 12
 anchor_right = 1.0
@@ -56,7 +89,6 @@ layout_mode = 0
 theme_override_font_sizes/normal_font_size = 36
 text = "1st Place (Obviously)"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="HUD"]
 anchors_preset = 7
@@ -72,7 +104,6 @@ layout_mode = 0
 theme_override_font_sizes/normal_font_size = 32
 text = "Score: 0"
 horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="StageName" type="Label" parent="HUD"]
 anchors_preset = 7
@@ -88,7 +119,6 @@ layout_mode = 0
 theme_override_font_sizes/normal_font_size = 28
 text = "Stage 1: City"
 horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="ChaosLabel" type="Label" parent="HUD"]
 anchors_preset = 7
@@ -104,7 +134,6 @@ layout_mode = 0
 theme_override_font_sizes/normal_font_size = 24
 text = "Chaos: x1.0"
 horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="FuelBar" type="TextureProgressBar" parent="HUD"]
 anchors_preset = 8
@@ -118,8 +147,6 @@ offset_right = 200.0
 offset_bottom = -30.0
 layout_mode = 0
 value = 50
-fill_mode = 2
-texture_progress/progress_fraction = 0.5
 
 [node name="FuelLabel" type="Label" parent="HUD"]
 anchors_preset = 8
@@ -134,7 +161,6 @@ offset_bottom = -65.0
 layout_mode = 0
 text = "Spectator Fuel"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatUI" type="Control" parent="."]
 anchors_preset = 10
@@ -187,7 +213,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "🥪"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon2" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -202,7 +227,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "🍌"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon3" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -217,7 +241,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "👮"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon4" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -232,7 +255,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "🛢️"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon5" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -247,7 +269,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "🧱"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon6" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -262,7 +283,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "💉"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon7" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -277,7 +297,6 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "🚧"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CheatIcon8" type="Label" parent="CheatUI/CheatIcons"]
 anchors_preset = 8
@@ -292,4 +311,3 @@ offset_bottom = 20.0
 layout_mode = 0
 text = "😅"
 horizontal_alignment = 1
-vertical_alignment = 1
