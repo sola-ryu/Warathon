@@ -1,2 +1,5 @@
 .godot
 *.translation
+
+# Godot MCP cache
+addons/godot_mcp/cache/

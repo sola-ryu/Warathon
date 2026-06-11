@@ -53,4 +53,10 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "START RACE"
 
+[node name="ControlsHint" type="Label" parent="VBoxContainer" unique_id=1223344107]
+modulate = Color(0.4, 0.4, 0.4, 1)
+layout_mode = 2
+text = "A-F keys use cheats during race"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

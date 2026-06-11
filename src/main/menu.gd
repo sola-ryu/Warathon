@@ -15,12 +15,16 @@ func _ready() -> void:
 func _on_start_button_pressed() -> void:
 	var mode: String = mode_selector.get_item_text(mode_selector.get_selected())
 	if "Story" in mode:
+		GameData.game_mode = "marathon"
 		get_tree().change_scene_to_file("res://src/main/race.tscn")
-	elif "Fever" in mode:
+	elif "Fever" in mode or "Arcade" in mode:
+		GameData.game_mode = "cheat_fever"
 		get_tree().change_scene_to_file("res://src/main/race.tscn")
 	elif "Retrathon" in mode:
+		GameData.game_mode = "retrathon"
 		get_tree().change_scene_to_file("res://src/main/race.tscn")
 	else:
+		GameData.game_mode = "microgame"
 		get_tree().change_scene_to_file("res://src/main/microgame_hub.tscn")
 
 func _process(_delta: float) -> void:

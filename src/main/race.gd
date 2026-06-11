@@ -12,13 +12,13 @@ enum SegmentType { ROAD, SPECTATOR_ZONE, FOOD_VENDOR, WATER_STATION, MEDICAL_TEN
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var course_bg: ColorRect = $Background
 @onready var ground: ColorRect = $Ground
-@onready var cheat_ui: Control = $CheatUI
-@onready var position_display: Label = $HUD/PositionDisplay
-@onready var score_label: Label = $HUD/ScoreLabel
-@onready var fuel_bar: TextureProgressBar = $HUD/FuelBar
-@onready var chaos_label: Label = $HUD/ChaosLabel
-@onready var cheat_icons: HBoxContainer = $CheatUI/CheatIcons
-@onready var stage_name_label: Label = $HUD/StageName
+@onready var cheat_ui: Control = $HUDLayer/CheatUI
+@onready var position_display: Label = $HUDLayer/HUD/PositionDisplay
+@onready var score_label: Label = $HUDLayer/HUD/ScoreLabel
+@onready var fuel_bar: TextureProgressBar = $HUDLayer/HUD/FuelBar
+@onready var chaos_label: Label = $HUDLayer/HUD/ChaosLabel
+@onready var cheat_icons: HBoxContainer = $HUDLayer/CheatUI/CheatIcons
+@onready var stage_name_label: Label = $HUDLayer/HUD/StageName
 
 # Visual systems
 @onready var screen_shake: Camera2D = $Camera2D
@@ -27,6 +27,9 @@ enum SegmentType { ROAD, SPECTATOR_ZONE, FOOD_VENDOR, WATER_STATION, MEDICAL_TEN
 @onready var cheat_zones_node: Node2D = $CheatZones
 @onready var spectators_node: Node2D = $Spectators
 @onready var background_sprite: Sprite2D = $BackgroundSprite
+@onready var intro_overlay: CanvasLayer = $IntroOverlay
+@onready var distance_label: Label = $HUDLayer/HUD/DistanceLabel
+@onready var speed_label: Label = $HUDLayer/HUD/SpeedLabel
 
 const BG_TEXTURES := {
 	"city": preload("res://assets/backgrounds/urban_city.png"),
@@ -57,6 +60,11 @@ const OPPONENT_SCENES := {
 	"Yoshi": preload("res://src/characters/opponent_yoshi.tscn"),
 	"Donkey Kong": preload("res://src/characters/opponent_dk.tscn"),
 	"Bowser": preload("res://src/characters/opponent_bowser.tscn"),
+	"King Boo": preload("res://src/characters/opponent_king_boo.tscn"),
+	"Waluigi": preload("res://src/characters/opponent_waluigi.tscn"),
+	"Birdo": preload("res://src/characters/opponent_birdo.tscn"),
+	"Daisy": preload("res://src/characters/opponent_daisy.tscn"),
+	"Shy Guy": preload("res://src/characters/opponent_shy_guy.tscn"),
 }
 
 
@@ -71,10 +79,16 @@ var opponent_configs := [
 	{"name": "Yoshi", "personality": 1, "speed_mult": 0.87},
 	{"name": "Donkey Kong", "personality": 2, "speed_mult": 0.95},
 	{"name": "Bowser", "personality": 3, "speed_mult": 0.93},
+	{"name": "King Boo", "personality": 3, "speed_mult": 0.86},
+	{"name": "Waluigi", "personality": 1, "speed_mult": 0.89},
+	{"name": "Birdo", "personality": 2, "speed_mult": 0.87},
+	{"name": "Daisy", "personality": 0, "speed_mult": 0.90},
+	{"name": "Shy Guy", "personality": 1, "speed_mult": 0.84},
 ]
 
 # Game state
 var race_active := false
+var game_mode: String = "marathon"
 var current_stage_idx := 0
 var stages := ["city", "park", "bowser", "dream", "finish"]
 var stage_progress := 0.0
@@ -90,6 +104,8 @@ const CHEAT_BY_KEY := {
 	Key.KEY_D: "Oil Spill",
 	Key.KEY_E: "Spectator Wall",
 	Key.KEY_F: "Energy Shot",
+	Key.KEY_G: "Shortcut Gate",
+	Key.KEY_H: "Sweat Slip",
 }
 
 func _ready() -> void:
@@ -104,7 +120,7 @@ func _ready() -> void:
 		add_child(opp)
 		opp.position_changed.connect(_on_opponent_position)
 	
-	# Auto-start the race
+	game_mode = GameData.game_mode
 	start_race()
 
 func _process(delta: float) -> void:
@@ -131,11 +147,15 @@ func _input(event: InputEvent) -> void:
 	if not race_active:
 		return
 	
+	# Dismiss intro overlay on any key press
+	if intro_overlay and intro_overlay.visible and event is InputEventKey and event.pressed:
+		_hide_intro()
+		return
+	
 	# Cheat execution via keyboard shortcuts
 	if event is InputEventKey and event.pressed:
-		var kc: Key = event.keycode
-		if CHEAT_BY_KEY.has(kc):
-			var cheat_name: String = CHEAT_BY_KEY[kc]
+		if CHEAT_BY_KEY.has(event.keycode):
+			var cheat_name: String = CHEAT_BY_KEY[event.keycode]
 			if CheatManager.execute(cheat_name, wario.current_distance):
 				wario.start_cheat_animation()
 				
@@ -165,6 +185,9 @@ func _update_hud() -> void:
 	score_label.text = "Score: %d" % int(GameData.total_score)
 	fuel_bar.value = GameData.spectator_fuel
 	chaos_label.text = "Chaos: x%.1f" % GameData.current_chaos_multiplier
+	
+	distance_label.text = "%dm" % int(wario.current_distance)
+	speed_label.text = "%d km/h" % int(wario.speed * 3.6)
 
 func _on_score_updated(new_score: float) -> void:
 	score_label.text = "Score: %d" % int(new_score)
@@ -314,9 +337,25 @@ func _create_opponent(config: Dictionary) -> Node2D:
 
 func start_race() -> void:
 	race_active = true
+	game_mode = GameData.game_mode
 	GameData.reset_for_race()
 	current_stage_idx = 0
 	stage_progress = 0.0
+	
+	match game_mode:
+		"cheat_fever":
+			total_race_distance = 5000.0
+			GameData.spectator_fuel = 100.0
+			CheatManager.refill_fuel(100.0)
+			GameData.current_chaos_multiplier = 3.0
+		"retrathon":
+			total_race_distance = 3000.0
+			for opp in opponents:
+				if opp.opponent_name == "Waluigi":
+					opp.base_speed_multiplier = 1.02
+		_:
+			total_race_distance = 5000.0
+			CheatManager.refill_fuel(50.0)
 	
 	CourseGenerator.set_stage("city")
 	course_segments = CourseGenerator.generate_course()
@@ -337,6 +376,17 @@ func start_race() -> void:
 		opp.reset()
 	
 	_render_course()
+	
+	_show_intro()
+
+func _show_intro() -> void:
+	intro_overlay.visible = true
+	await get_tree().create_timer(4.0).timeout
+	if intro_overlay.visible:
+		_hide_intro()
+
+func _hide_intro() -> void:
+	intro_overlay.visible = false
 
 func end_race() -> void:
 	race_active = false

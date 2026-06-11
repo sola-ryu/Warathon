@@ -10,6 +10,7 @@
 script = ExtResource("1_race")
 
 [node name="Background" type="ColorRect" parent="." unique_id=2054690378]
+z_index = -2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -49,7 +50,65 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(1, 0.8, 0, 0.6)
 
-[node name="HUD" type="Control" parent="." unique_id=765178111]
+[node name="IntroOverlay" type="CanvasLayer" parent="." unique_id=1223344100]
+
+[node name="Dim" type="ColorRect" parent="IntroOverlay" unique_id=1223344101]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.75)
+
+[node name="VBox" type="VBoxContainer" parent="IntroOverlay" unique_id=1223344102]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Title" type="Label" parent="IntroOverlay/VBox" unique_id=1223344103]
+layout_mode = 2
+text = "WARATHON"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="IntroOverlay/VBox" unique_id=1223344104]
+modulate = Color(0.9, 0.9, 0.3, 1)
+layout_mode = 2
+text = "Auto-run race! Press keys to cheat:"
+horizontal_alignment = 1
+
+[node name="CheatList" type="Label" parent="IntroOverlay/VBox" unique_id=1223344105]
+layout_mode = 2
+text = "A=Sandwich Snatch   B=Banana Barrage
+C=Fake Police   D=Oil Spill
+E=Spectator Wall   F=Energy Shot"
+horizontal_alignment = 1
+
+[node name="Dismiss" type="Label" parent="IntroOverlay/VBox" unique_id=1223344106]
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 2
+text = "Press any key or wait to dismiss"
+horizontal_alignment = 1
+
+[node name="Wario" parent="." unique_id=1162583435 instance=ExtResource("4_7ksaq")]
+position = Vector2(200, 500)
+scale = Vector2(0.35, 0.35)
+is_player = true
+
+[node name="BackgroundSprite" type="Sprite2D" parent="." unique_id=999653122]
+z_index = -1
+centered = false
+
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=1844841506]
+
+[node name="HUD" type="Control" parent="HUDLayer" unique_id=765178111]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -61,118 +120,132 @@ offset_bottom = 700.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PositionDisplay" type="Label" parent="HUD" unique_id=1168150456]
+[node name="PositionDisplay" type="Label" parent="HUDLayer/HUD" unique_id=1168150456]
 layout_mode = 0
 offset_right = 200.0
-offset_bottom = 50.0
+offset_bottom = 40.0
 text = "1st Place (Obviously)"
 horizontal_alignment = 1
 
-[node name="ScoreLabel" type="Label" parent="HUD" unique_id=811966404]
+[node name="ScoreLabel" type="Label" parent="HUDLayer/HUD" unique_id=811966404]
 layout_mode = 0
-offset_right = 230.0
-offset_bottom = 50.0
+offset_top = 46.0
+offset_right = 200.0
+offset_bottom = 86.0
 text = "Score: 0"
 horizontal_alignment = 2
 
-[node name="StageName" type="Label" parent="HUD" unique_id=1898322525]
+[node name="StageName" type="Label" parent="HUDLayer/HUD" unique_id=1898322525]
 layout_mode = 0
-offset_right = 330.0
+offset_left = 455.0
+offset_right = 785.0
 offset_bottom = 40.0
 text = "Stage 1: City"
 horizontal_alignment = 2
 
-[node name="ChaosLabel" type="Label" parent="HUD" unique_id=55705799]
+[node name="DistanceLabel" type="Label" parent="HUDLayer/HUD" unique_id=1223344001]
 layout_mode = 0
-offset_right = 230.0
+offset_top = 94.0
+offset_right = 150.0
+offset_bottom = 124.0
+text = "0m"
+horizontal_alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="HUDLayer/HUD" unique_id=1223344002]
+layout_mode = 0
+offset_top = 128.0
+offset_right = 150.0
+offset_bottom = 153.0
+text = "0 km/h"
+horizontal_alignment = 1
+
+[node name="ChaosLabel" type="Label" parent="HUDLayer/HUD" unique_id=55705799]
+layout_mode = 0
+offset_left = 1010.0
+offset_right = 1240.0
 offset_bottom = 35.0
 text = "Chaos: x1.0"
 horizontal_alignment = 2
 
-[node name="FuelBar" type="TextureProgressBar" parent="HUD" unique_id=2120954946]
+[node name="FuelBar" type="TextureProgressBar" parent="HUDLayer/HUD" unique_id=2120954946]
 layout_mode = 0
-offset_right = 400.0
-offset_bottom = 30.0
+offset_left = 420.0
+offset_top = 648.0
+offset_right = 820.0
+offset_bottom = 678.0
 value = 50.0
 
-[node name="FuelLabel" type="Label" parent="HUD" unique_id=1200004671]
+[node name="FuelLabel" type="Label" parent="HUDLayer/HUD" unique_id=1200004671]
 layout_mode = 0
-offset_right = 400.0
-offset_bottom = 23.0
+offset_left = 420.0
+offset_top = 620.0
+offset_right = 820.0
+offset_bottom = 645.0
 text = "Spectator Fuel"
 horizontal_alignment = 1
 
-[node name="CheatUI" type="Control" parent="." unique_id=1282604868]
+[node name="CheatUI" type="Control" parent="HUDLayer" unique_id=1282604868]
 layout_mode = 3
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = -120.0
+offset_top = 580.0
 offset_right = 1260.0
-offset_bottom = -20.0
+offset_bottom = 680.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="CheatLabel" type="Label" parent="CheatUI" unique_id=1016608887]
+[node name="CheatLabel" type="Label" parent="HUDLayer/CheatUI" unique_id=1016608887]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 23.0
 text = "CHEATS: A=Sandwich B=Banana C=Police D=Oil E=Wall F=Energy"
 horizontal_alignment = 1
 
-[node name="CheatIcons" type="HBoxContainer" parent="CheatUI" unique_id=1032899107]
+[node name="CheatIcons" type="HBoxContainer" parent="HUDLayer/CheatUI" unique_id=1032899107]
 layout_mode = 0
 offset_right = 480.0
 offset_bottom = 60.0
 theme_override_constants/separation = 10
 
-[node name="CheatIcon" type="Label" parent="CheatUI/CheatIcons" unique_id=407127260]
+[node name="CheatIcon" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=407127260]
 layout_mode = 2
 text = "🥪"
 horizontal_alignment = 1
 
-[node name="CheatIcon2" type="Label" parent="CheatUI/CheatIcons" unique_id=4070780]
+[node name="CheatIcon2" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=4070780]
 layout_mode = 2
 text = "🍌"
 horizontal_alignment = 1
 
-[node name="CheatIcon3" type="Label" parent="CheatUI/CheatIcons" unique_id=1383124088]
+[node name="CheatIcon3" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=1383124088]
 layout_mode = 2
 text = "👮"
 horizontal_alignment = 1
 
-[node name="CheatIcon4" type="Label" parent="CheatUI/CheatIcons" unique_id=1677768901]
+[node name="CheatIcon4" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=1677768901]
 layout_mode = 2
 text = "🛢️"
 horizontal_alignment = 1
 
-[node name="CheatIcon5" type="Label" parent="CheatUI/CheatIcons" unique_id=1091983983]
+[node name="CheatIcon5" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=1091983983]
 layout_mode = 2
 text = "🧱"
 horizontal_alignment = 1
 
-[node name="CheatIcon6" type="Label" parent="CheatUI/CheatIcons" unique_id=744672639]
+[node name="CheatIcon6" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=744672639]
 layout_mode = 2
 text = "💉"
 horizontal_alignment = 1
 
-[node name="CheatIcon7" type="Label" parent="CheatUI/CheatIcons" unique_id=165839406]
+[node name="CheatIcon7" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=165839406]
 layout_mode = 2
 text = "🚧"
 horizontal_alignment = 1
 
-[node name="CheatIcon8" type="Label" parent="CheatUI/CheatIcons" unique_id=1604680543]
+[node name="CheatIcon8" type="Label" parent="HUDLayer/CheatUI/CheatIcons" unique_id=1604680543]
 layout_mode = 2
 text = "😅"
 horizontal_alignment = 1
-
-[node name="Wario" parent="." unique_id=1162583435 instance=ExtResource("4_7ksaq")]
-position = Vector2(200, 500)
-scale = Vector2(0.35, 0.35)
-is_player = true
-
-[node name="BackgroundSprite" type="Sprite2D" parent="." unique_id=999653122]
-z_index = -1
-centered = false

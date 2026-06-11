@@ -19,6 +19,9 @@ var spectator_fuel := 50.0
 # Current stage
 var current_stage := ""
 
+# Game mode: marathon, cheat_fever, retrathon, microgame
+var game_mode := "marathon"
+
 # Cheat codex — tracks every cheat used in a race
 var cheat_log := []
 

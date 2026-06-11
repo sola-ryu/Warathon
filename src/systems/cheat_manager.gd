@@ -84,6 +84,8 @@ func can_execute(cheat_name: String) -> bool:
 	if not CHEAT_DEFS.has(cheat_name):
 		return false
 	var state: Dictionary = active_cheats[cheat_name]
+	if GameData.game_mode == "cheat_fever":
+		return not state["on_cooldown"]
 	return not state["on_cooldown"] and GameData.unlocked_cheats.has(cheat_name)
 
 func execute(cheat_name: String, distance_traveled: float = 0.0) -> bool:
@@ -91,7 +93,7 @@ func execute(cheat_name: String, distance_traveled: float = 0.0) -> bool:
 		return false
 	
 	var def: Dictionary = CHEAT_DEFS[cheat_name]
-	var cost: int = def["fuel_cost"]
+	var cost: int = def["fuel_cost"] if GameData.game_mode != "cheat_fever" else 0
 	
 	if fuel_available < cost:
 		return false
