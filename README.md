@@ -54,7 +54,7 @@ Wario cheats his way to victory in a marathon. The race is rigged. The winner is
 - **Audio Manager** — Placeholder with stage music and cheat SFX mapping
 
 ### ⏳ Next
-- [ ] Sprite art (hand-drawn Wario + opponents)
+- [x] Sprite art (generated via ComfyUI — 38 assets)
 - [ ] Actual audio/SFX integration
 - [ ] Waluigi rival mode logic
 - [ ] Cheat zone area triggers (food vendors, water stations, etc.)
@@ -114,6 +114,16 @@ The race is rigged. Wario always wins. The fun is in **how** he cheats and the c
 - Fuel system ties cheats to spectator zones — you need to find crowds
 - Chaos multiplier rewards chaining cheats together
 - Losing is impossible. The game literally cannot let you lose.
+
+## Generated Assets (38 images via ComfyUI)
+
+| Category | Count | Contents |
+|----------|-------|----------|
+| Characters | 13 | Wario + 12 opponents (Mario, Luigi, Peach, Bowser, Toad, Yoshi, DK, King Boo, Birdo, Daisy, Shy Guy, Waluigi) |
+| Items | 12 | Food vendor, water station, banana peels, oil can, medical tent, bridge gate, sandwich icon, energy drink, lightning bolt, disguise mask, bridge piece, peel |
+| Backgrounds | 5 | Urban city, park, lava castle, dreamland, crowd |
+| UI Elements | 5 | Magnifying glass, timer, fuel bar, score counter, stage map |
+| Sprites | 3 | Spectator figures (cheering, excited, disappointed) |
 
 ---
 
