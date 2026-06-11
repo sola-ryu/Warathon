@@ -117,13 +117,65 @@ The race is rigged. Wario always wins. The fun is in **how** he cheats and the c
 
 ## Generated Assets (38 images via ComfyUI)
 
-| Category | Count | Contents |
-|----------|-------|----------|
-| Characters | 13 | Wario + 12 opponents (Mario, Luigi, Peach, Bowser, Toad, Yoshi, DK, King Boo, Birdo, Daisy, Shy Guy, Waluigi) |
-| Items | 12 | Food vendor, water station, banana peels, oil can, medical tent, bridge gate, sandwich icon, energy drink, lightning bolt, disguise mask, bridge piece, peel |
-| Backgrounds | 5 | Urban city, park, lava castle, dreamland, crowd |
-| UI Elements | 5 | Magnifying glass, timer, fuel bar, score counter, stage map |
-| Sprites | 3 | Spectator figures (cheering, excited, disappointed) |
+All assets are in `images/` — names are descriptive for Godot integration.
+
+### Characters (`images/characters/`)
+| File | Opponent |
+|------|----------|
+| `wario_run.png` | Wario (player) |
+| `mario_run.png` | Mario |
+| `luigi_run.png` | Luigi |
+| `peach_run.png` | Peach |
+| `bowser_run.png` | Bowser |
+| `toad_run.png` | Toad |
+| `yoshi_run.png` | Yoshi |
+| `dk_run.png` | Donkey Kong |
+| `king_boo_run.png` | King Boo |
+| `birdo_run.png` | Birdo |
+| `daisy_run.png` | Daisy |
+| `shy_guy_run.png` | Shy Guy |
+| `waluigi_run.png` | Waluigi (rival) |
+
+### Items (`images/items/`)
+| File | Purpose |
+|------|---------|
+| `food_vendor.png` | Food vendor cart (fuel zone) |
+| `water_station.png` | Water station (fuel zone) |
+| `banana_peel.png` | Banana peel cheat item |
+| `oil_can.png` | Oil can cheat item |
+| `medical_tent.png` | Medical tent (fuel zone) |
+| `bridge_gate.png` | Bridge gate piece |
+| `sandwich_icon.png` | Stealth Sandwich microgame icon |
+| `energy_drink.png` | Energy Shot cheat item |
+| `lightning_bolt.png` | Speed boost indicator |
+| `disguise_mask.png` | Disguise microgame item |
+| `bridge_piece.png` | Bridge Builder microgame piece |
+| `peel.png` | Loose peel (scatter cheat) |
+
+### Backgrounds (`images/backgrounds/`)
+| File | Stage |
+|------|-------|
+| `urban_city.png` | Stage 1 — City |
+| `park.png` | Stage 2 — Park |
+| `lava_castle.png` | Stage 3 — Bowser's Castle |
+| `dreamland.png` | Stage 4 — Dream Land |
+| `crowd.png` | Spectator zone filler |
+
+### UI (`images/ui/`)
+| File | Purpose |
+|------|---------|
+| `magnifying_glass.png` | Microgame selector icon |
+| `timer.png` | Countdown timer frame |
+| `fuel_bar.png` | Fuel meter bar |
+| `score_counter.png` | Score display frame |
+| `stage_map.png` | Course map overlay |
+
+### Spectator Sprites (`images/sprites/`)
+| File | Mood |
+|------|-------|
+| `spectator_cheering.png` | Cheering crowd |
+| `spectator_excited.png` | Excited reaction |
+| `spectator_disappointed.png` | Disappointed reaction |
 
 ---
 
