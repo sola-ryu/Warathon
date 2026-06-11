@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dpv1e3viu57u5"]
+
+[ext_resource type="Texture2D" uid="uid://bubdrvhosinax" path="res://assets/items/water_station.png" id="1_kbwll"]
+
+[node name="WaterStation" type="Sprite2D" unique_id=933489735]
+texture = ExtResource("1_kbwll")

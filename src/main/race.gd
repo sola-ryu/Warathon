@@ -26,6 +26,39 @@ enum SegmentType { ROAD, SPECTATOR_ZONE, FOOD_VENDOR, WATER_STATION, MEDICAL_TEN
 @onready var vignette: CanvasLayer = $Vignette
 @onready var cheat_zones_node: Node2D = $CheatZones
 @onready var spectators_node: Node2D = $Spectators
+@onready var background_sprite: Sprite2D = $BackgroundSprite
+
+const BG_TEXTURES := {
+	"city": preload("res://assets/backgrounds/urban_city.png"),
+	"park": preload("res://assets/backgrounds/park.png"),
+	"bowser": preload("res://assets/backgrounds/lava_castle.png"),
+	"dream": preload("res://assets/backgrounds/dreamland.png"),
+	"finish": preload("res://assets/backgrounds/urban_city.png"),
+}
+
+const ITEM_TEXTURES := {
+	"FOOD_VENDOR": preload("res://assets/items/food_vendor.png"),
+	"WATER_STATION": preload("res://assets/items/water_station.png"),
+	"MEDICAL_TENT": preload("res://assets/items/medical_tent.png"),
+	"BRIDGE": preload("res://assets/items/bridge_gate.png"),
+}
+
+const SPECTATOR_TEXTURES := [
+	preload("res://assets/sprites/spectator_cheering.png"),
+	preload("res://assets/sprites/spectator_excited.png"),
+	preload("res://assets/sprites/spectator_disappointed.png"),
+]
+
+const OPPONENT_SCENES := {
+	"Mario": preload("res://src/characters/opponent_mario.tscn"),
+	"Luigi": preload("res://src/characters/opponent_luigi.tscn"),
+	"Peach": preload("res://src/characters/opponent_peach.tscn"),
+	"Toad": preload("res://src/characters/opponent_toad.tscn"),
+	"Yoshi": preload("res://src/characters/opponent_yoshi.tscn"),
+	"Donkey Kong": preload("res://src/characters/opponent_dk.tscn"),
+	"Bowser": preload("res://src/characters/opponent_bowser.tscn"),
+}
+
 
 # Opponents
 var course_segments := []
@@ -83,6 +116,7 @@ func _process(delta: float) -> void:
 	var cam_x: float = camera_2d.position.x
 	var cam_y: float = camera_2d.position.y
 	course_bg.position = Vector2(cam_x - SCREEN_W / 2.0, cam_y - SCREEN_H / 2.0)
+	background_sprite.position = Vector2(cam_x - SCREEN_W / 2.0, cam_y - SCREEN_H / 2.0 + 60)
 	ground.position = Vector2(cam_x - SCREEN_W / 2.0, cam_y + SCREEN_H / 2.0 - GROUND_H)
 	
 	_update_hud()
@@ -162,6 +196,8 @@ func _transition_to_next_stage() -> void:
 	ground.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	ground.color = cfg["ground_color"]
 	ground.set_deferred("size", Vector2(SCREEN_W, GROUND_H))
+	background_sprite.texture = BG_TEXTURES.get(stage_name, BG_TEXTURES["city"])
+	background_sprite.scale = Vector2(1.3, 1.3)
 	stage_name_label.text = "Stage %d: %s" % [current_stage_idx + 1, stage_name.capitalize()]
 	
 	CheatManager.refill_fuel(20.0)
@@ -182,9 +218,9 @@ func _render_course() -> void:
 			SegmentType.SPECTATOR_ZONE:
 				_render_spectator_zone(seg, sx, sw)
 			SegmentType.FOOD_VENDOR:
-				_render_vendor(sx, sw, ground_top, Color(1, 0.85, 0.2), "FOOD")
+				_render_vendor(sx, sw, ground_top, Color(1, 0.85, 0.2), "FOOD_VENDOR")
 			SegmentType.WATER_STATION:
-				_render_vendor(sx, sw, ground_top, Color(0.3, 0.6, 1), "WATER")
+				_render_vendor(sx, sw, ground_top, Color(0.3, 0.6, 1), "WATER_STATION")
 			SegmentType.MEDICAL_TENT:
 				_render_medical_tent(sx, sw, ground_top)
 			SegmentType.BRIDGE:
@@ -195,47 +231,27 @@ func _render_course() -> void:
 				_render_obstacle(sx, sw, ground_top)
 
 func _render_spectator_zone(_seg: Dictionary, sx: float, sw: float) -> void:
-	var count := randi_range(6, 14)
+	var count := randi_range(4, 10)
 	for i in range(count):
-		var box := ColorRect.new()
-		box.size = Vector2(10, 16)
-		box.color = Color(randf_range(0.5, 1), randf_range(0.5, 1), randf_range(0.5, 1))
-		box.position = Vector2(sx + (i / float(count)) * sw, SCREEN_H / 2.0 - GROUND_H - 18 + randi_range(-2, 2))
-		spectators_node.add_child(box)
+		var spr := Sprite2D.new()
+		spr.texture = SPECTATOR_TEXTURES[randi() % SPECTATOR_TEXTURES.size()]
+		spr.scale = Vector2(0.3, 0.3)
+		spr.position = Vector2(sx + (i / float(count)) * sw, SCREEN_H / 2.0 - GROUND_H - 40)
+		spectators_node.add_child(spr)
 
-func _render_vendor(sx: float, sw: float, ground_top: float, color: Color, label: String) -> void:
-	var rect := ColorRect.new()
-	rect.size = Vector2(sw, GROUND_H * 0.6)
-	rect.color = color
-	rect.position = Vector2(sx, ground_top - rect.size.y)
-	spectators_node.add_child(rect)
-	
-	var lbl := Label.new()
-	lbl.text = label
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.position = Vector2(sx, ground_top - rect.size.y)
-	lbl.size = Vector2(sw, rect.size.y)
-	spectators_node.add_child(lbl)
+func _render_vendor(sx: float, sw: float, ground_top: float, _color: Color, label_key: String) -> void:
+	var spr := Sprite2D.new()
+	spr.texture = ITEM_TEXTURES.get(label_key)
+	spr.scale = Vector2(0.25, 0.25)
+	spr.position = Vector2(sx + sw / 2.0, ground_top - 60)
+	spectators_node.add_child(spr)
 
 func _render_medical_tent(sx: float, sw: float, ground_top: float) -> void:
-	var rect := ColorRect.new()
-	rect.size = Vector2(sw, GROUND_H * 0.6)
-	rect.color = Color(0.9, 0.9, 0.9)
-	rect.position = Vector2(sx, ground_top - rect.size.y)
-	spectators_node.add_child(rect)
-	
-	var cross := ColorRect.new()
-	cross.size = Vector2(sw * 0.3, GROUND_H * 0.3)
-	cross.color = Color(0.9, 0.2, 0.2)
-	cross.position = Vector2(sx + sw * 0.35, ground_top - rect.size.y + rect.size.y * 0.2)
-	spectators_node.add_child(cross)
-	
-	# Cross vertical bar
-	var cross_v := ColorRect.new()
-	cross_v.size = Vector2(GROUND_H * 0.15, GROUND_H * 0.3)
-	cross_v.color = Color(0.9, 0.2, 0.2)
-	cross_v.position = Vector2(sx + sw / 2.0 - cross_v.size.x / 2.0, ground_top - rect.size.y + rect.size.y * 0.2)
-	spectators_node.add_child(cross_v)
+	var spr := Sprite2D.new()
+	spr.texture = ITEM_TEXTURES["MEDICAL_TENT"]
+	spr.scale = Vector2(0.25, 0.25)
+	spr.position = Vector2(sx + sw / 2.0, ground_top - 60)
+	spectators_node.add_child(spr)
 
 func _render_bridge(sx: float, sw: float, ground_top: float) -> void:
 	var platform := ColorRect.new()
@@ -244,12 +260,12 @@ func _render_bridge(sx: float, sw: float, ground_top: float) -> void:
 	platform.position = Vector2(sx, ground_top)
 	spectators_node.add_child(platform)
 	
-	for i in range(int(sw / 20)):
-		var post := ColorRect.new()
-		post.size = Vector2(4, 20)
-		post.color = Color(0.4, 0.25, 0.15)
-		post.position = Vector2(sx + i * 20.0, ground_top - 20)
-		spectators_node.add_child(post)
+	for i in range(int(sw / 40)):
+		var gate := Sprite2D.new()
+		gate.texture = ITEM_TEXTURES["BRIDGE"]
+		gate.scale = Vector2(0.25, 0.25)
+		gate.position = Vector2(sx + i * 40.0 + 20.0, ground_top - 40)
+		spectators_node.add_child(gate)
 
 func _render_shortcut(sx: float, sw: float, ground_top: float) -> void:
 	var arrow := ColorRect.new()
@@ -280,11 +296,20 @@ func _render_obstacle(sx: float, sw: float, ground_top: float) -> void:
 		spectators_node.add_child(stripe)
 
 func _create_opponent(config: Dictionary) -> Node2D:
-	var opp = OPPONENT_SCRIPT.new()
-	opp.opponent_name = config["name"]
+	var packed: PackedScene = OPPONENT_SCENES.get(config["name"])
+	var opp: Node2D = packed.instantiate() if packed else OPPONENT_SCRIPT.new()
+	
+	if packed:
+		opp.position = Vector2(150 + config.get("start_offset", 0), 500)
+		if opp.has_method("set_opponent_name"):
+			opp.opponent_name = config["name"]  # Will be set via script
+	else:
+		opp.opponent_name = config["name"]
+		opp.position = Vector2(150 + config.get("start_offset", 0), 500)
+	
 	opp.personality = config["personality"]
 	opp.base_speed_multiplier = config["speed_mult"]
-	opp.position = Vector2(150 + config.get("start_offset", 0), 500)
+	
 	return opp
 
 func start_race() -> void:
@@ -303,6 +328,8 @@ func start_race() -> void:
 	ground.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	ground.color = cfg["ground_color"]
 	ground.set_deferred("size", Vector2(SCREEN_W, GROUND_H))
+	background_sprite.texture = BG_TEXTURES["city"]
+	background_sprite.scale = Vector2(1.3, 1.3)
 	stage_name_label.text = "Stage 1: City"
 	
 	wario.reset()

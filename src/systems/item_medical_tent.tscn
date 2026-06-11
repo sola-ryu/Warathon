@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://m5hly2h0cvwj"]
+
+[ext_resource type="Texture2D" uid="uid://dpd1s1uv42u5j" path="res://assets/items/medical_tent.png" id="1_hfg07"]
+
+[node name="MedicalTent" type="Sprite2D" unique_id=455981209]
+texture = ExtResource("1_hfg07")

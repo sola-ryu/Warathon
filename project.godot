@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.6")
 GameData="*res://src/systems/game_data.gd"
 CheatManager="*res://src/systems/cheat_manager.gd"
 CourseGenerator="*res://src/systems/course_generator.gd"
+McpRuntime="*res://addons/godot_mcp/runtime/mcp_runtime.gd"
 
 [display]
 

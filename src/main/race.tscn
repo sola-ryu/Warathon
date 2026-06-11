@@ -170,4 +170,9 @@ horizontal_alignment = 1
 
 [node name="Wario" parent="." unique_id=1162583435 instance=ExtResource("4_7ksaq")]
 position = Vector2(200, 500)
+scale = Vector2(0.35, 0.35)
 is_player = true
+
+[node name="BackgroundSprite" type="Sprite2D" parent="." unique_id=999653122]
+z_index = -1
+centered = false
