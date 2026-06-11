@@ -24,19 +24,19 @@ const OPPONENT_DEFS := {
 }
 
 func spawn_opponent(name: String, start_x: float, start_y: float) -> Node2D:
-	var def := OPPONENT_DEFS.get(name)
+	var def: Dictionary = OPPONENT_DEFS.get(name)
 	if def == null:
 		return null
 	
-	var scene_path := OPPONENT_SCENES.get(name)
+	var scene_path: String = OPPONENT_SCENES.get(name)
 	if scene_path == null:
 		return null
 	
-	var scene = load(scene_path)
+	var scene: PackedScene = load(scene_path)
 	if scene == null:
 		return null
 	
-	var instance = scene.instantiate()
+	var instance: Node2D = scene.instantiate()
 	instance.opponent_name = name
 	instance.personality = def["personality"]
 	instance.base_speed_multiplier = def["speed_mult"]
@@ -47,7 +47,7 @@ func spawn_opponent(name: String, start_x: float, start_y: float) -> Node2D:
 func spawn_default_lineup(start_x: float, start_y: float) -> Array[Node2D]:
 	var lineup := []
 	for name in ["Mario", "Luigi", "Peach", "Toad", "Yoshi", "Donkey Kong", "Bowser"]:
-		var def := OPPONENT_DEFS[name]
+		var def: Dictionary = OPPONENT_DEFS[name]
 		var opp = spawn_opponent(name, start_x + def["start_offset"], start_y)
 		if opp:
 			lineup.append(opp)

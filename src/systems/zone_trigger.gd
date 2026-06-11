@@ -28,16 +28,16 @@ var zone_cooldowns := {}
 
 func _process(delta: float) -> void:
 	for zone_id in active_zones:
-		var zone := active_zones[zone_id]
+		var zone: Node2D = active_zones[zone_id]
 		
 		# Check if Wario is overlapping this zone
 		if race_scene and race_scene.has_node("Wario"):
-			var wario_pos := race_scene.get_node("Wario").position
-			var zone_rect := zone.get_node_or_null("HitBox")
+			var wario_pos: Vector2 = race_scene.get_node("Wario").position
+			var zone_rect: Node = zone.get_node_or_null("HitBox")
 			
 			if zone_rect:
-				var zone_bounds := zone_rect.get_global_rect()
-				if wario_pos.x >= zone_bounds.position.x and wario_pos.x <= zone_bounds.end.x:
+				var zone_x: float = zone_rect.global_position.x
+				if wario_pos.x >= zone_x and wario_pos.x <= zone_x + 150.0:
 					_on_wario_in_zone(zone, zone_id)
 
 func _on_wario_in_zone(zone: Node2D, zone_id: String) -> void:
@@ -48,8 +48,9 @@ func _on_wario_in_zone(zone: Node2D, zone_id: String) -> void:
 			return
 	
 	# Grant fuel
-	var zone_type := zone.get("zone_type", "spectator_zone")
-	var fuel := ZONE_FUEL.get(zone_type, 5.0)
+	var zone_type_val = zone.get("zone_type")
+	var zone_type: String = zone_type_val if zone_type_val != null else "spectator_zone"
+	var fuel: float = ZONE_FUEL.get(zone_type, 5.0)
 	CheatManager.refill_fuel(fuel)
 	
 	zone_cooldowns[zone_id] = 2.0  # 2 second cooldown per zone

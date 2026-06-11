@@ -40,8 +40,16 @@ var stage_progress := 0.0
 var total_race_distance := 5000.0
 
 # Cheat input
-const CHEAT_KEYS := {"A": "Sandwich Snatch", "B": "Banana Barrage", "C": "Fake Police", 
-	"D": "Oil Spill", "E": "Spectator Wall", "F": "Energy Shot"}
+const OPPONENT_SCRIPT: GDScript = preload("res://src/characters/opponent.gd")
+
+const CHEAT_BY_KEY := {
+	KEY_A: "Sandwich Snatch",
+	KEY_B: "Banana Barrage",
+	KEY_C: "Fake Police",
+	KEY_D: "Oil Spill",
+	KEY_E: "Spectator Wall",
+	KEY_F: "Energy Shot",
+}
 
 func _ready() -> void:
 	GameData.score_updated.connect(_on_score_updated)
@@ -77,9 +85,9 @@ func _input(event: InputEvent) -> void:
 		return
 	
 	# Cheat execution via keyboard shortcuts
-	for key in CHEAT_KEYS:
-		if event is InputEventKey and event.pressed and event.keycode == key.to_lower().ord_at(0):
-			var cheat_name := CHEAT_KEYS[key]
+	if event is InputEventKey and event.pressed:
+		var cheat_name: String = CHEAT_BY_KEY.get(event.keycode)
+		if cheat_name != null:
 			if CheatManager.execute(cheat_name, wario.current_distance):
 				wario.start_cheat_animation()
 				
@@ -93,7 +101,7 @@ func _input(event: InputEvent) -> void:
 
 func _update_hud() -> void:
 	# Position calculation
-	var player_dist := wario.current_distance
+	var player_dist: float = wario.current_distance
 	var positions := [{"name": "Wario", "dist": player_dist}]
 	for opp in opponents:
 		positions.append({"name": opp.opponent_name, "dist": opp.current_distance})
@@ -118,23 +126,23 @@ func _on_cheat_executed(cheat_name: String, success: bool) -> void:
 	
 	# Apply cheat effects to opponents
 	for opp in opponents:
-		var result := opp.react_to_cheat(cheat_name, wario.current_distance)
+		var result: String = opp.react_to_cheat(cheat_name, wario.current_distance)
 		if result == "affected":
 			opp.speed = opp.BASE_SPEED * opp.base_speed_multiplier * 0.5
 
-func _on_opponent_position(position: float) -> void:
+func _on_opponent_position(_position: float) -> void:
 	pass
 
 func _transition_to_next_stage() -> void:
 	current_stage_idx += 1
-	var stage_name := stages[current_stage_idx]
+	var stage_name: String = stages[current_stage_idx]
 	CourseGenerator.set_stage(stage_name)
 	CourseGenerator.generate_course()
 	
 	var cfg := CourseGenerator.get_stage_config()
 	course_bg.color = cfg["background_color"]
 	ground.color = cfg["ground_color"]
-	stage_name_label.text = "Stage %d: %s" % (current_stage_idx + 1, stage_name.capitalize())
+	stage_name_label.text = "Stage %d: %s" % [current_stage_idx + 1, stage_name.capitalize()]
 	
 	# Refuel for new stage
 	CheatManager.refill_fuel(20.0)
@@ -177,7 +185,7 @@ func _random_clothing_color() -> Color:
 	return [Color(0.3, 0.3, 0.8), Color(0.8, 0.2, 0.2), Color(0.2, 0.6, 0.2), Color(0.9, 0.9, 0.3), Color(0.5, 0.2, 0.6)][randi() % 5]
 
 func _create_opponent(config: Dictionary) -> Node2D:
-	var opp := Opponent.new()
+	var opp = OPPONENT_SCRIPT.new()
 	opp.opponent_name = config["name"]
 	opp.personality = config["personality"]
 	opp.base_speed_multiplier = config["speed_mult"]

@@ -63,7 +63,7 @@ func generate_course() -> Array:
 	var pos := 0.0
 	
 	while pos < total_course_length:
-		var segment := _pick_segment(pos)
+		var segment: Variant = _pick_segment(pos)
 		if segment == null:
 			break
 		
@@ -75,9 +75,9 @@ func generate_course() -> Array:
 func get_stage_config() -> Dictionary:
 	return STAGE_CONFIG.get(current_stage, STAGE_CONFIG["city"])
 
-func _pick_segment(position: float) -> Dictionary:
-	var stage_cfg := STAGE_CONFIG.get(current_stage, STAGE_CONFIG["city"])
-	var enabled := stage_cfg["enabled"]
+func _pick_segment(position: float):
+	var stage_cfg: Dictionary = STAGE_CONFIG.get(current_stage, STAGE_CONFIG["city"])
+	var enabled: Array = stage_cfg["enabled"]
 	
 	if enabled.is_empty():
 		return null
@@ -93,8 +93,8 @@ func _pick_segment(position: float) -> Dictionary:
 	for seg_type in enabled:
 		cumulative += WEIGHTS.get(seg_type, 1)
 		if roll <= cumulative:
-			var length_range := SEGMENT_LENGTHS[seg_type]
-			var length := randf_range(length_range[0], length_range[1])
+			var length_range: Array = SEGMENT_LENGTHS[seg_type]
+			var length: float = randf_range(length_range[0], length_range[1])
 			return {
 				"type": seg_type,
 				"start": position,
@@ -103,11 +103,11 @@ func _pick_segment(position: float) -> Dictionary:
 			}
 	
 	# Fallback to road
-	var length_range := SEGMENT_LENGTHS[SegmentType.ROAD]
+	var fallback_range: Array = SEGMENT_LENGTHS[SegmentType.ROAD]
 	return {
 		"type": SegmentType.ROAD,
 		"start": position,
-		"length": randf_range(length_range[0], length_range[1]),
+		"length": randf_range(fallback_range[0], fallback_range[1]),
 		"fuel_reward": 0,
 	}
 

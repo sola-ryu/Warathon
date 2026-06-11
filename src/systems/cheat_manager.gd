@@ -67,7 +67,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	for cheat_name in active_cheats:
-		var state := active_cheats[cheat_name]
+		var state: Dictionary = active_cheats[cheat_name]
 		if state["on_cooldown"]:
 			state["timer"] -= delta
 			if state["timer"] <= 0:
@@ -83,15 +83,15 @@ func _process(delta: float) -> void:
 func can_execute(cheat_name: String) -> bool:
 	if not CheatManager.CHEAT_DEFS.has(cheat_name):
 		return false
-	var state := active_cheats[cheat_name]
+	var state: Dictionary = active_cheats[cheat_name]
 	return not state["on_cooldown"] and GameData.unlocked_cheats.has(cheat_name)
 
 func execute(cheat_name: String, distance_traveled: float = 0.0) -> bool:
 	if not can_execute(cheat_name):
 		return false
 	
-	var def := CHEAT_DEFS[cheat_name]
-	var cost := def["fuel_cost"]
+	var def: Dictionary = CHEAT_DEFS[cheat_name]
+	var cost: int = def["fuel_cost"]
 	
 	if fuel_available < cost:
 		return false
@@ -99,7 +99,7 @@ func execute(cheat_name: String, distance_traveled: float = 0.0) -> bool:
 	fuel_available -= cost
 	GameData.spectator_fuel = max(0, GameData.spectator_fuel - cost * 0.5)
 	
-	var state := active_cheats[cheat_name]
+	var state: Dictionary = active_cheats[cheat_name]
 	state["on_cooldown"] = true
 	state["timer"] = def["cooldown"]
 	
@@ -115,18 +115,18 @@ func execute(cheat_name: String, distance_traveled: float = 0.0) -> bool:
 	
 	# Check for unlocks
 	if GameData.total_score > 500 and not GameData.unlocked_cheats.has("Energy Shot"):
-		GameData.unlocked_cheats["Energy Shot"] = true
-		cheat_unlocked.emit("Energy Shot")
+		GameData.unlocked_cheats.append("Energy Shot")
+		GameData.cheat_unlocked.emit("Energy Shot")
 	elif GameData.total_score > 1500 and not GameData.unlocked_cheats.has("Shortcut Gate"):
-		GameData.unlocked_cheats["Shortcut Gate"] = True
-		cheat_unlocked.emit("Shortcut Gate")
+		GameData.unlocked_cheats.append("Shortcut Gate")
+		GameData.cheat_unlocked.emit("Shortcut Gate")
 	
 	return true
 
 func get_cooldown_remaining(cheat_name: String) -> float:
 	if not active_cheats.has(cheat_name):
 		return 0.0
-	var state := active_cheats[cheat_name]
+	var state: Dictionary = active_cheats[cheat_name]
 	return state["timer"] if state["on_cooldown"] else 0.0
 
 func get_active_effects() -> Array:

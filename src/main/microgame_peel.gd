@@ -34,7 +34,7 @@ func _update_target() -> void:
 	if targets_remaining <= 0:
 		return
 	
-	var name := OPPONENT_NAMES[randi() % OPPONENT_NAMES.size()]
+	var name: String = OPPONENT_NAMES[randi() % OPPONENT_NAMES.size()]
 	current_target = name
 	target_label.text = "🍌 Peel for: %s!" % name
 	target_label.add_theme_color_override("font_color", OPPONENT_COLORS[name])
@@ -62,7 +62,7 @@ func _place_peel() -> void:
 		targets_remaining -= 1
 		
 		# Flash peel zone
-		var flash_color := OPPONENT_COLORS[current_target]
+		var flash_color: Color = OPPONENT_COLORS[current_target]
 		peel_zone.color = flash_color * 0.8
 		await get_tree().create_timer(0.15).timeout
 		peel_zone.color = Color(0.9, 0.9, 0.3)
@@ -70,7 +70,7 @@ func _place_peel() -> void:
 		score_label.text = "Score: %d" % score
 		
 		if targets_remaining <= 0:
-			_end_game(True)
+			_end_game(true)
 		else:
 			_update_target()
 

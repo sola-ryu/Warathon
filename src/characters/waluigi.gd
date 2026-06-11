@@ -16,14 +16,14 @@ var rival_reactions := {
 }
 
 func react_to_cheat(cheat_name: String, distance_traveled: float) -> String:
-	var resistance := cheat_resistance.get(cheat_name, 0.2)  # Lower = more affected
-	var affected := randf() > resistance
+	var resistance: float = cheat_resistance.get(cheat_name, 0.2)
+	var affected: bool = randf() > resistance
 	
 	if not affected:
 		return "resisted"
 	
-	var reactions := rival_reactions.get(cheat_name, ["*glaring*", "*runs faster in anger*"])
-	var reaction := reactions[randi() % reactions.size()]
+	var reactions: Array = rival_reactions.get(cheat_name, ["*glaring*", "*runs faster in anger*"])
+	var reaction: String = reactions[randi() % reactions.size()]
 	
 	reacted_to_cheat.emit(cheat_name, reaction)
 	
@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 		_execute_rival_cheat()
 
 func _execute_rival_cheat() -> void:
-	var cheat := rival_cheats[randi() % rival_cheits.size()]
+	var cheat: String = rival_cheats[randi() % rival_cheats.size()]
 	waluligi_cheat_executed.emit(cheat)
 	
 	# Apply effect: Waluigi gets a speed boost

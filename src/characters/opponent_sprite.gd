@@ -18,7 +18,7 @@ const OPPONENT_VISUALS := {
 }
 
 func configure(opponent_name: String) -> void:
-	var visual := OPPONENT_VISUALS.get(opponent_name)
+	var visual: Dictionary = OPPONENT_VISUALS.get(opponent_name)
 	if visual == null:
 		return
 	
@@ -26,6 +26,6 @@ func configure(opponent_name: String) -> void:
 	name_label.text = opponent_name
 	expression_label.text = visual["expression"]
 	
-	var h := visual["height"]
+	var h: int = visual["height"]
 	body_rect.custom_minimum_size = Vector2(30, h)
 	position.y = 560 - h

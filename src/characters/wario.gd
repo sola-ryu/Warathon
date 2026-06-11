@@ -1,5 +1,5 @@
 ## Wario — the player character
-extends "base_runner.gd"
+extends "res://src/characters/base_runner.gd"
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -8,7 +8,7 @@ enum State { RUNNING, CHEATING, BOOSTING, SLIDING }
 var state := State.RUNNING
 
 func _process(delta: float) -> void:
-	.super()
+	super._process(delta)
 	
 	match state:
 		State.CHEATING:
@@ -29,7 +29,7 @@ func activate_boost(duration: float) -> void:
 	state = State.BOOSTING
 	apply_cheat_boost(duration, 1.5)
 
-func activate_slip(duration: float) -> void:
+func activate_slip(_duration: float) -> void:
 	state = State.SLIDING
 	speed = BASE_SPEED * 0.3
 

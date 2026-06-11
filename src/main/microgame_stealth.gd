@@ -81,7 +81,7 @@ func _show_result(won: bool) -> void:
 	# Show result overlay
 	var overlay := ColorRect.new()
 	overlay.color = result_color * 0.5
-	overlayanchors_preset = 15
+	overlay.anchors_preset = 15
 	overlay.anchor_right = 1.0
 	overlay.anchor_bottom = 1.0
 	add_child(overlay)

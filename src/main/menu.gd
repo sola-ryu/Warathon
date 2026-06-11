@@ -13,7 +13,7 @@ func _ready() -> void:
 	mode_selector.add_item("MICROGAMES — Cheat Mini-Games")
 
 func _on_start_button_pressed() -> void:
-	var mode := mode_selector.get_selected_text()
+	var mode: String = mode_selector.get_item_text(mode_selector.get_selected())
 	if "Story" in mode:
 		get_tree().change_scene_to_file("res://src/main/race.tscn")
 	elif "Fever" in mode:
@@ -23,7 +23,7 @@ func _on_start_button_pressed() -> void:
 	else:
 		get_tree().change_scene_to_file("res://src/main/microgame_hub.tscn")
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Title bob animation
 	if title_label:
 		title_label.position.y = 120 + sin(Time.get_ticks_msec() / 500.0) * 8

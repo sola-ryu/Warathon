@@ -36,7 +36,7 @@ func play_sfx(sfx_name: String) -> void:
 	print("[Audio] Playing SFX: ", sfx_name)
 
 func play_cheat_sfx(cheat_name: String) -> void:
-	var sfx := CHEAT_SFX.get(cheat_name, "generic_boop")
+	var sfx: String = CHEAT_SFX.get(cheat_name, "generic_boop")
 	play_sfx(sfx)
 
 func start_music(track_name: String) -> void:
@@ -50,7 +50,7 @@ func stop_music() -> void:
 	# TODO: Stop music via AudioServer
 
 func change_stage_music(stage_name: String) -> void:
-	var track := STAGE_MUSIC.get(stage_name, "cheesy_jazz_funk")
+	var track: String = STAGE_MUSIC.get(stage_name, "cheesy_jazz_funk")
 	if track != current_music:
 		stop_music()
 		start_music(track)

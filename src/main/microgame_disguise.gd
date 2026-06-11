@@ -4,8 +4,8 @@ extends Control
 
 @onready var timer_label: Label = $TimerLabel
 @onready var score_label: Label = $ScoreLabel
-@onready status_label: Label = $StatusLabel
-@onready start_button: Button = $StartButton
+@onready var status_label: Label = $StatusLabel
+@onready var start_button: Button = $StartButton
 
 var game_active := false
 var time_left := 20.0

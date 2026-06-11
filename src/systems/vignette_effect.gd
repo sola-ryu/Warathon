@@ -1,8 +1,7 @@
 ## WarioWare-style cheat vignette — garish border effect during cheat execution
 extends CanvasLayer
 
-@onready var vignette: ColorRect = $Vignette
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var vignette: ColorRect = $VignetteRect
 
 var is_active := false
 

@@ -1,17 +1,24 @@
 ; Engine configuration file.
 ; It's best edited using the editor UI and not directly,
-; but it can also be edited via text for version control.
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
 
 [application]
 
 config/name="Warathon"
 run/main_scene="res://src/main/menu.tscn"
-config/features=PackedStringArray("Mobile/Touch", "PC Only")
+config/features=PackedStringArray("4.6")
 
 [autoload]
 
 GameData="*res://src/systems/game_data.gd"
 CheatManager="*res://src/systems/cheat_manager.gd"
+CourseGenerator="*res://src/systems/course_generator.gd"
 
 [display]
 
@@ -20,6 +27,10 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/stretch/scale="1"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [input]
 

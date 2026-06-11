@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://coas1m4erns43"]
+
+[ext_resource type="Script" uid="uid://btk2qm5gvry7o" path="res://src/characters/wario.gd" id="1_upbps"]
+
+[node name="Wario" type="CharacterBody2D" unique_id=1162583435]
+script = ExtResource("1_upbps")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1878309163]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=502278582]

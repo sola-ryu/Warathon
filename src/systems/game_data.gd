@@ -6,13 +6,13 @@ signal chaos_multiplier_updated(multiplier)
 signal cheat_unlocked(cheat_name)
 
 # Player stats
-var total_score := 0
+var total_score := 0.0
 var current_chaos_multiplier := 1.0
 var honesty_rating := 0.0
 var gold_coins := 0
 
 # Unlocked cheats (by name)
-var unlocked_cheats := {"Sandwich Snatch", "Banana Barrage", "Oil Spill"}
+var unlocked_cheats := ["Sandwich Snatch", "Banana Barrage", "Oil Spill"]
 
 # Spectator fuel (0-100%)
 var spectator_fuel := 50.0
@@ -44,7 +44,7 @@ func log_cheat(cheat_name: String, success: bool, distance: float) -> void:
 	})
 
 func reset_for_race() -> void:
-	total_score = 0
+	total_score = 0.0
 	current_chaos_multiplier = 1.0
 	honesty_rating = 0.0
 	spectator_fuel = 50.0

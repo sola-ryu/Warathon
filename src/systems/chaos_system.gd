@@ -17,8 +17,8 @@ func _process(delta: float) -> void:
 func trigger_random_event() -> void:
 	if randf() < 0.02:  # 2% chance per frame
 		var events := ["crowd_cheers", "spectator_interrupts", "official_blinks", "random_boost"]
-		var event := events[randi() % events.size()]
-		chaos_event.emit(event, {"distance": current_distance()})
+		var event: String = events[randi() % events.size()]
+		chaos_event.emit(event, {"distance": 0.0})
 
 func handle_spectator_reaction(spectator_count: int) -> void:
 	if spectator_count > 20:

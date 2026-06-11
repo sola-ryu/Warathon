@@ -19,7 +19,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	# Scroll backgrounds based on Wario's movement
-	var wario_pos := get_node_or_null("../Wario")
+	var wario_pos: Node2D = get_node_or_null("../Wario")
 	if wario_pos == null:
 		return
 	

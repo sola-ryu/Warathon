@@ -2,7 +2,6 @@
 extends CanvasLayer
 
 @onready var damage_label: Label = $DamageLabel
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var is_flashing := false
 

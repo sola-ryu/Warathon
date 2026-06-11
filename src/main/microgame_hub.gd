@@ -28,13 +28,13 @@ func _populate_game_list() -> void:
 		btn.text = "%s %s — %s" % [game["icon"], game["name"], game["desc"]]
 		btn.size_flags_horizontal = Control.SIZE_FILL
 		btn.custom_minimum_size = Vector2(500, 60)
-		btn.theme_override_font_sizes/normal_font_size = 18
+		btn.add_theme_font_size_override("font_size", 18)
 		btn.pressed.connect(func(): _start_game(GAMES.find(game)))
 		game_list.add_child(btn)
 
 func _start_game(idx: int) -> void:
 	current_game = idx
-	var game := GAMES[idx]
+	var game: Dictionary = GAMES[idx]
 	
 	# Transition to microgame scene
 	if idx == 0:

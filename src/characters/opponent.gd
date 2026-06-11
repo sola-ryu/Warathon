@@ -1,5 +1,5 @@
 ## Opponent base class — all runners inherit from this
-extends "base_runner.gd"
+extends "res://src/characters/base_runner.gd"
 
 signal reacted_to_cheat(cheat_name: String, reaction: String)
 
@@ -36,15 +36,15 @@ var cheat_reactions := {
 func _ready() -> void:
 	speed = BASE_SPEED * base_speed_multiplier
 
-func react_to_cheat(cheat_name: String, distance_traveled: float) -> String:
-	var resistance := cheat_resistance.get(cheat_name, 0.3)
-	var affected := randf() > resistance
+func react_to_cheat(cheat_name: String, _distance_traveled: float) -> String:
+	var resistance: float = cheat_resistance.get(cheat_name, 0.3)
+	var affected: bool = randf() > resistance
 	
 	if not affected:
 		return "resisted"
 	
-	var reactions := cheat_reactions.get(cheat_name, ["*confused noises*"])
-	var reaction := reactions[randi() % reactions.size()]
+	var reactions: Array = cheat_reactions.get(cheat_name, ["*confused noises*"])
+	var reaction: String = reactions[randi() % reactions.size()]
 	
 	reacted_to_cheat.emit(cheat_name, reaction)
 	
@@ -60,7 +60,7 @@ func react_to_cheat(cheat_name: String, distance_traveled: float) -> String:
 	
 	return "affected"
 
-func apply_resistance(duration: float) -> void:
+func apply_resistance(_duration: float) -> void:
 	match personality:
 		Personality.FERAL:
 			# Feral opponents fight back — temporarily speed up

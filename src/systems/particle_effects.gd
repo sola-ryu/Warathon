@@ -24,7 +24,7 @@ func spawn_cheat_effects(cheat_name: String, position: Vector2) -> void:
 func _spawn_banana_peels(position: Vector2) -> void:
 	for i in range(3):
 		var peel := ColorRect.new()
-	(peel.custom_minimum_size = Vector2(15, 8)
+		peel.custom_minimum_size = Vector2(15, 8)
 		peel.color = Color(0.95, 0.9, 0.2)
 		peel.position = position + Vector2(randf_range(-40, 40), randf_range(-20, 10))
 		peel.rotation = randf_range(-0.5, 0.5)
