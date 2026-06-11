@@ -6,8 +6,9 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_begin = 2
-grow_end = 2
+layout_mode = 3
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hub")
 
@@ -92,3 +93,5 @@ offset_bottom = -30.0
 layout_mode = 0
 text = "← BACK"
 theme_override_font_sizes/normal_font_size = 20
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

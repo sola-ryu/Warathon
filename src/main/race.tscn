@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bwayrpurp4ior"]
 
 [ext_resource type="Script" uid="uid://bjaqo00x3slsi" path="res://src/main/race.gd" id="1_race"]
+[ext_resource type="Script" uid="uid://b5go8q7ev8mb" path="res://src/systems/screen_shake.gd" id="2_ybr23"]
 [ext_resource type="Script" uid="uid://dtimej88kpedu" path="res://src/systems/dam_flash.gd" id="3_flash"]
 [ext_resource type="PackedScene" uid="uid://coas1m4erns43" path="res://src/characters/wario.tscn" id="4_7ksaq"]
 [ext_resource type="Script" uid="uid://n46vgcconijs" path="res://src/systems/vignette_effect.gd" id="4_vignette"]
@@ -24,6 +25,7 @@ color = Color(0.4, 0.35, 0.25, 1)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=342209761]
 position = Vector2(300, 360)
+script = ExtResource("2_ybr23")
 
 [node name="CheatZones" type="Node2D" parent="." unique_id=1251980213]
 
@@ -168,6 +170,4 @@ horizontal_alignment = 1
 
 [node name="Wario" parent="." unique_id=1162583435 instance=ExtResource("4_7ksaq")]
 position = Vector2(200, 500)
-scale = Vector2(2, 2)
-character_name = "Wario"
 is_player = true

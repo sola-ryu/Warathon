@@ -1,25 +1,25 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bhsd3bb75xk4p"]
 
-[ext_resource type="Script" path="res://src/main/results.gd" id="1_results"]
+[ext_resource type="Script" uid="uid://bk8ile0x7x31h" path="res://src/main/results.gd" id="1_results"]
 
-[node name="Results" type="Control"]
+[node name="Results" type="Control" unique_id=152666202]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_begin = 2
-grow_end = 2
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_results")
 
-[node name="Background" type="ColorRect" parent="."]
-anchors_preset = 15
+[node name="Background" type="ColorRect" parent="." unique_id=388321756]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.85, 0.75, 0.2, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1324366011]
 layout_mode = 0
-anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -28,43 +28,39 @@ offset_left = -200.0
 offset_top = -200.0
 offset_right = 200.0
 offset_bottom = 200.0
-grow_mode = 4
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="ResultsLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 0
-theme_override_fonts/font_size = 64
+[node name="ResultsLabel" type="Label" parent="VBoxContainer" unique_id=965046664]
+layout_mode = 2
 text = "🏆 Wario Wins! ...Again."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ScoreLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 0
-theme_override_fonts/font_size = 36
+[node name="ScoreLabel" type="Label" parent="VBoxContainer" unique_id=1283885787]
+layout_mode = 2
 text = "Cheating Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HonestyLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 0
-theme_override_fonts/font_size = 28
+[node name="HonestyLabel" type="Label" parent="VBoxContainer" unique_id=1168472619]
+modulate = Color(0.3, 0.3, 0.3, 1)
+layout_mode = 2
 text = "Honesty Rating: 0% — Badge of Honor"
 horizontal_alignment = 1
 vertical_alignment = 1
-modulate = Color(0.3, 0.3, 0.3, 1)
 
-[node name="ChaosLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 0
-theme_override_fonts/font_size = 24
+[node name="ChaosLabel" type="Label" parent="VBoxContainer" unique_id=1092199451]
+modulate = Color(0.3, 0.3, 0.3, 1)
+layout_mode = 2
 text = "Peak Chaos Multiplier: x1.0"
 horizontal_alignment = 1
 vertical_alignment = 1
-modulate = Color(0.3, 0.3, 0.3, 1)
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
-layout_mode = 0
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=828816799]
+layout_mode = 2
 size_flags_horizontal = 4
 text = "RACE AGAIN"
-theme_override_font_sizes/normal_font_size = 28
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

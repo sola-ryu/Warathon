@@ -1,7 +1,6 @@
 ## Procedural course segment generator
 extends Node
 
-signal segment_generated(position: float, segment_type: String)
 
 enum SegmentType { ROAD, SPECTATOR_ZONE, FOOD_VENDOR, WATER_STATION, MEDICAL_TENT, BRIDGE, SHORTCUT, OBSTACLE }
 

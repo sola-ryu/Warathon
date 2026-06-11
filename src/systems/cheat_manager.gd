@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
 				state["end_timer"] = 0.0
 
 func can_execute(cheat_name: String) -> bool:
-	if not CheatManager.CHEAT_DEFS.has(cheat_name):
+	if not CHEAT_DEFS.has(cheat_name):
 		return false
 	var state: Dictionary = active_cheats[cheat_name]
 	return not state["on_cooldown"] and GameData.unlocked_cheats.has(cheat_name)
@@ -116,10 +116,8 @@ func execute(cheat_name: String, distance_traveled: float = 0.0) -> bool:
 	# Check for unlocks
 	if GameData.total_score > 500 and not GameData.unlocked_cheats.has("Energy Shot"):
 		GameData.unlocked_cheats.append("Energy Shot")
-		GameData.cheat_unlocked.emit("Energy Shot")
 	elif GameData.total_score > 1500 and not GameData.unlocked_cheats.has("Shortcut Gate"):
 		GameData.unlocked_cheats.append("Shortcut Gate")
-		GameData.cheat_unlocked.emit("Shortcut Gate")
 	
 	return true
 

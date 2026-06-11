@@ -70,7 +70,7 @@ func _place_peel() -> void:
 		score_label.text = "Score: %d" % score
 		
 		if targets_remaining <= 0:
-			_end_game(true)
+			_end_game(false)
 		else:
 			_update_target()
 

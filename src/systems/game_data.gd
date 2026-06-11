@@ -3,7 +3,6 @@ extends Node
 
 signal score_updated(new_score)
 signal chaos_multiplier_updated(multiplier)
-signal cheat_unlocked(cheat_name)
 
 # Player stats
 var total_score := 0.0

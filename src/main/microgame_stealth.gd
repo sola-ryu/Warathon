@@ -4,7 +4,7 @@ extends Control
 
 @onready var timer_label: Label = $TimerLabel
 @onready var score_label: Label = $ScoreLabel
-@onready var sandwich_target: Sprite2D = $FoodZone/SandwichTarget
+@onready var sandwich_target: ColorRect = $FoodZone/SandwichTarget
 @onready var guard_label: Label = $GuardLabel
 @onready var start_button: Button = $StartButton
 
